@@ -17,6 +17,7 @@ import microsoft.exchange.webservices.data.core.service.schema.AppointmentSchema
 import microsoft.exchange.webservices.data.credential.ExchangeCredentials;
 import microsoft.exchange.webservices.data.credential.WebCredentials;
 import microsoft.exchange.webservices.data.property.complex.Attendee;
+import microsoft.exchange.webservices.data.property.complex.EmailAddress;
 import microsoft.exchange.webservices.data.property.complex.FolderId;
 import microsoft.exchange.webservices.data.property.complex.ItemId;
 import microsoft.exchange.webservices.data.property.complex.Mailbox;
@@ -118,7 +119,7 @@ public class EwsProvider  implements Closeable {
 
             // Set url
             if("true".equalsIgnoreCase(autoDiscover)) {
-                exchangeService.autodiscoverUrl(uri.toString());
+                exchangeService.autodiscoverUrl(uri);
             } else {
                 exchangeService.setUrl(URI.create(uri));
             }
@@ -158,23 +159,34 @@ public class EwsProvider  implements Closeable {
         }
     }
 
-    public void createAppointment(@Nonnull AppointmentDTO appointment, @Nonnull String resourceMailAddress) throws Exception {
-        Appointment a = new Appointment(exchangeService);
-        a.setSubject(appointment.subject());
-        a.setBody(MessageBody.getMessageBodyFromText(appointment.body()));
-        a.setStart(Date.from(appointment.start().toInstant()));
-        a.setEnd(Date.from(appointment.end().toInstant()));
-        // a.setExtendedProperty(getProperty(), appointment.getSourceUid());
-        a.getResources().add(new Attendee(resourceMailAddress));
+    public AppointmentDTO createAppointment(@Nonnull AppointmentDTO appointment) {
+        try {
+            Appointment a = new Appointment(exchangeService);
+            a.setSubject(appointment.subject());
+            a.setBody(MessageBody.getMessageBodyFromText(appointment.body()));
+            a.setStart(Date.from(appointment.start().toInstant()));
+            a.setEnd(Date.from(appointment.end().toInstant()));
+            // a.setExtendedProperty(getProperty(), appointment.getSourceUid());
+            a.getResources().add(new Attendee(appointment.resourceMailAddress()));
 
-        a.save();
+            a.save();
+
+            return mapAppointmentToDTO(a);
+        } catch (Exception ex) {
+            throw new CommonRbException(ex);
+        }
     }
 
-    public void update(AppointmentDTO dto) throws Exception {
-        Appointment app = findAppointmentByUid(dto.uid());
-        if(app != null) {
-            app.setSubject(dto.subject());
-            app.update(ConflictResolutionMode.AutoResolve);
+    public AppointmentDTO update(AppointmentDTO dto) {
+        try {
+            Appointment app = findAppointmentByUid(dto.uid());
+            if (app != null) {
+                app.setSubject(dto.subject());
+                app.update(ConflictResolutionMode.AutoResolve);
+            }
+            return mapAppointmentToDTO(app);
+        } catch (Exception e) {
+            throw new CommonRbException(e);
         }
     }
 
@@ -195,7 +207,8 @@ public class EwsProvider  implements Closeable {
                     ZonedDateTime.ofInstant(appointment.getStart().toInstant(), ZoneId.systemDefault()),
                     ZonedDateTime.ofInstant(appointment.getEnd().toInstant(), ZoneId.systemDefault()),
                     appointment.getSubject(),
-                    MessageBody.getStringFromMessageBody(appointment.getBody())
+                    MessageBody.getStringFromMessageBody(appointment.getBody()),
+                    appointment.getResources().getItems().stream().map(EmailAddress::getAddress).findFirst().orElseThrow()
             );
 
             /*

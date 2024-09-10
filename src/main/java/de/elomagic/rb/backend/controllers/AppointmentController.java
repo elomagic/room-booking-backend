@@ -1,13 +1,16 @@
 package de.elomagic.rb.backend.controllers;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import de.elomagic.rb.backend.components.AppointmentComponent;
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
@@ -22,18 +25,18 @@ public class AppointmentController {
     }
 
     @GetMapping("/api/appointment")
-    Set<AppointmentDTO> getAppointment() {
-        return appointmentComponent.getAppointmentsOfToday();
+    Set<AppointmentDTO> getAppointment(@RequestHeader("RB-Resource-ID") @Nullable String resourceAddress) {
+        return appointmentComponent.getAppointmentsOfToday(resourceAddress);
     }
 
     @PostMapping("/api/appointment")
-    AppointmentDTO createAppointment() {
-        return appointmentComponent.createAdHocAppointment(123);
+    AppointmentDTO createAppointment(@Nonnull AppointmentDTO appointment) {
+        return appointmentComponent.createAdHocAppointment(appointment);
     }
 
     @PutMapping("/api/appointment")
-    AppointmentDTO updateAppointment() {
-        return appointmentComponent.updateCurrentAppointment(123);
+    AppointmentDTO updateAppointment(@Nonnull AppointmentDTO appointment) {
+        return appointmentComponent.updateCurrentAppointment(appointment);
     }
 
 }
