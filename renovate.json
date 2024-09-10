@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "pinDigests": true,
+  "dependencyDashboard": true,
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    }, {
+      "description": "Group Spring-related updates",
+      "groupName": "spring",
+      "matchDepPrefixes": [
+        "org.springframework",
+        "org.spring"
+      ]
+    }, {
+      "description": "Group Maven plugin updates",
+      "groupName": "maven-plugins",
+      "matchDepTypes": [ "build" ]
+    }
+  ]
+}

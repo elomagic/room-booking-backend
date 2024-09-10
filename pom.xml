@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.3</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>de.elomagic</groupId>
+	<artifactId>room-booking-backend</artifactId>
+
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>room-booking-backend</name>
+
+	<description>Room Booking Display Backend</description>
+
+	<url>https://github.com/elomagic/room-booking-backend</url>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<inceptionYear>2024</inceptionYear>
+
+	<developers>
+		<developer>
+			<id>carsten.rambow</id>
+			<name>Carsten Rambow</name>
+			<roles>
+				<role>Product Owner</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:https://github.com/elomagic/room-booking-backend.git</connection>
+		<developerConnection>scm:git:https://github.com/elomagic/room-booking-backend.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/elomagic/room-booking-backend</url>
+	</scm>
+
+	<properties>
+		<java.version>21</java.version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<maven.compiler.release>21</maven.compiler.release>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+
+		<!-- To configure maven-license-plugin to check license headers -->
+		<license.name>Apache 2.0</license.name>
+		<license.owner>Carsten Rambow</license.owner>
+		<license.title>${project.name}</license.title>
+		<license.version>${project.version}</license.version>
+		<license.years>${project.inceptionYear}-present</license.years>
+		<license.mailto>mailto:developer AT elomagic DOT de</license.mailto>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.16.1</version>
+		</dependency>
+
+		<!-- From here only test dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- http://jeremylong.github.io/DependencyCheck/index.html -->
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>10.0.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<nvdApiServerId>nvd</nvdApiServerId>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6.3</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+				<version>2.8.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>makeAggregateBom</goal>
+						</goals>
+						<configuration>
+							<projectType>application</projectType>
+							<schemaVersion>1.5</schemaVersion>
+							<includeBomSerialNumber>true</includeBomSerialNumber>
+							<includeCompileScope>true</includeCompileScope>
+							<includeProvidedScope>true</includeProvidedScope>
+							<includeRuntimeScope>true</includeRuntimeScope>
+							<includeSystemScope>true</includeSystemScope>
+							<includeTestScope>false</includeTestScope>
+							<includeLicenseText>false</includeLicenseText>
+
+							<outputReactorProjects>true</outputReactorProjects>
+							<outputFormat>all</outputFormat>
+							<outputName>${project.artifactId}-${project.version}-sbom</outputName>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>docker</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<!-- https://github.com/fabric8io/docker-maven-plugin -->
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.45.0</version>
+						<executions>
+							<execution>
+								<id>docker-image</id>
+								<phase>install</phase>
+								<goals>
+									<goal>build</goal>
+									<goal>push</goal>
+								</goals>
+
+								<configuration>
+									<verbose>all</verbose>
+									<images>
+										<image>
+											<name>elo2017/remote-booking:${project.version}</name>
+											<registry>docker.io</registry>
+											<build>
+												<tags>
+													<tag>latest</tag>
+													<tag>${project.version}</tag>
+												</tags>
+
+												<buildx>
+													<platforms>linux/amd64</platforms>
+												</buildx>
+
+												<from>amazoncorretto:21-alpine</from>
+												<assemblies>
+													<assembly>
+														<name>rb</name>
+														<descriptorRef>artifact</descriptorRef>
+														<targetDir>/</targetDir>
+													</assembly>
+													<assembly>
+														<name>config</name>
+														<inline>
+															<files>
+																<file>
+																	<source>${basedir}/src/main/resources/application.properties</source>
+																	<outputDirectory>/</outputDirectory>
+																</file>
+															</files>
+														</inline>
+													</assembly>
+												</assemblies>
+												<workdir>/</workdir>
+												<runCmds>
+													<run>mkdir -p /logs</run>
+													<run>mkdir -p /config</run>
+													<run>mkdir -p /repositories</run>
+												</runCmds>
+												<volumes>
+													<volume>/logs</volume>
+													<volume>/config</volume>
+													<volume>/repositories</volume>
+												</volumes>
+												<ports>
+													<port>8080/tcp</port>
+												</ports>
+												<entryPoint>["java", "-Dspring.profiles.active=demo", "-jar", "/${project.artifactId}-${project.version}.jar"]</entryPoint>
+											</build>
+										</image>
+									</images>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+</project>
