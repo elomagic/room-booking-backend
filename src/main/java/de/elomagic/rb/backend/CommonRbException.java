@@ -11,7 +11,7 @@ public class CommonRbException extends RuntimeException {
     }
 
     public CommonRbException(Throwable cause) {
-        super(cause);
+        super(cause.getMessage(), cause);
     }
 
 }

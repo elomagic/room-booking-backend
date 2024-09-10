@@ -4,12 +4,13 @@ import de.elomagic.rb.backend.components.AppointmentComponent;
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 public class AppointmentController {
@@ -20,9 +21,8 @@ public class AppointmentController {
         this.appointmentComponent = appointmentComponent;
     }
 
-
     @GetMapping("/api/appointment")
-    List<AppointmentDTO> getAppointment() {
+    Set<AppointmentDTO> getAppointment() {
         return appointmentComponent.getAppointmentsOfToday();
     }
 

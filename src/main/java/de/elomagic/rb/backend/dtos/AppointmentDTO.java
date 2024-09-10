@@ -8,7 +8,8 @@ public record AppointmentDTO(
         @Nonnull String uid,
         @Nonnull ZonedDateTime start,
         @Nonnull ZonedDateTime end,
-        @Nonnull String subject) {
+        @Nonnull String subject,
+        @Nonnull String body) {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
