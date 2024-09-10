@@ -5,7 +5,7 @@ A tool that ...
 ---
 
 [![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
-[![build workflow](https://github.com/elomagic/room-booking-backend/actions/workflows/maven.yml/badge.svg)](https://github.com/elomagic/room-booking-backend/actions)
+[![build workflow](https://github.com/elomagic/room-booking-backend/actions/workflows/build.yml/badge.svg)](https://github.com/elomagic/room-booking-backend/actions)
 [![GitHub issues](https://img.shields.io/github/issues-raw/elomagic/room-booking-backend)](https://github.com/elomagic/room-booking-backend/issues)
 [![Latest](https://img.shields.io/github/release/elomagic/room-booking-backend.svg)](https://github.com/elomagic/room-booking-backend/releases)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/elomagic/room-booking-backend/graphs/commit-activity)
