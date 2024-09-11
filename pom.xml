@@ -13,7 +13,7 @@
 	<groupId>de.elomagic</groupId>
 	<artifactId>room-booking-backend</artifactId>
 
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<name>room-booking-backend</name>
 
