@@ -1,6 +1,7 @@
 package de.elomagic.rb.backend.providers;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
@@ -14,10 +15,10 @@ import microsoft.exchange.webservices.data.core.enumeration.service.SendCancella
 import microsoft.exchange.webservices.data.core.service.folder.CalendarFolder;
 import microsoft.exchange.webservices.data.core.service.item.Appointment;
 import microsoft.exchange.webservices.data.core.service.schema.AppointmentSchema;
+import microsoft.exchange.webservices.data.core.service.schema.ItemSchema;
 import microsoft.exchange.webservices.data.credential.ExchangeCredentials;
 import microsoft.exchange.webservices.data.credential.WebCredentials;
 import microsoft.exchange.webservices.data.property.complex.Attendee;
-import microsoft.exchange.webservices.data.property.complex.EmailAddress;
 import microsoft.exchange.webservices.data.property.complex.FolderId;
 import microsoft.exchange.webservices.data.property.complex.ItemId;
 import microsoft.exchange.webservices.data.property.complex.Mailbox;
@@ -82,7 +83,7 @@ public class EwsProvider  implements Closeable {
                     .getItems()
                     .stream()
                     .map(this::reloadAppointment)
-                    .map(this::mapAppointmentToDTO)
+                    .map(a -> mapAppointmentToDTO(a, resourceAddress))
                     .collect(Collectors.toSet());
         } catch(Exception ex) {
             LOGGER.error("Initializing error for service URL \"" + uri + "\". " + ex.getMessage(), ex);
@@ -107,14 +108,14 @@ public class EwsProvider  implements Closeable {
         try {
             ExchangeVersion exchangeVersion = ExchangeVersion.Exchange2010;
 
-            LOGGER.debug("Initialize service client for \"" + uri + "\". Request server version \"" + exchangeVersion + "\".");
+            LOGGER.debug("Initialize service client for \"{}}\". Request server version \"{}\".", uri, exchangeVersion);
 
             exchangeService = new ExchangeService(ExchangeVersion.Exchange2010);
 
             // Set credentials
             String p = password.matches("^\\{.*}$") ? "" : password;
 
-            ExchangeCredentials credentials = new WebCredentials(username, p, ""); // StringUtils.stripToEmpty(c.getDomain()));
+            ExchangeCredentials credentials = new WebCredentials(username, p, "");
             exchangeService.setCredentials(credentials);
 
             // Set url
@@ -132,8 +133,7 @@ public class EwsProvider  implements Closeable {
     private Appointment reloadAppointment(@Nonnull Appointment app) throws RuntimeException {
         try {
             String uid = app.getId().getUniqueId();
-            app = findAppointmentByUid(uid);
-            return app;
+            return findAppointmentByUid(uid);
         } catch(Exception ex) {
             throw new CommonRbException(ex);
         }
@@ -147,11 +147,12 @@ public class EwsProvider  implements Closeable {
         }
     }
 
+    @Nonnull
     private PropertySet getPropertySet() {
         try {
             return new PropertySet(
                     BasePropertySet.FirstClassProperties,
-                    AppointmentSchema.Body,
+                    ItemSchema.Body,
                     getProperty()
             );
         } catch(Exception ex) {
@@ -159,6 +160,7 @@ public class EwsProvider  implements Closeable {
         }
     }
 
+    @Nonnull
     public AppointmentDTO createAppointment(@Nonnull AppointmentDTO appointment) {
         try {
             Appointment a = new Appointment(exchangeService);
@@ -171,20 +173,25 @@ public class EwsProvider  implements Closeable {
 
             a.save();
 
-            return mapAppointmentToDTO(a);
+            return mapAppointmentToDTO(a, appointment.resourceMailAddress());
         } catch (Exception ex) {
             throw new CommonRbException(ex);
         }
     }
 
-    public AppointmentDTO update(AppointmentDTO dto) {
+    @Nullable
+    public AppointmentDTO update(@Nonnull AppointmentDTO dto) {
+        if (dto.uid() == null) {
+            return null;
+        }
+
         try {
             Appointment app = findAppointmentByUid(dto.uid());
             if (app != null) {
                 app.setSubject(dto.subject());
                 app.update(ConflictResolutionMode.AutoResolve);
             }
-            return mapAppointmentToDTO(app);
+            return app == null ? null : mapAppointmentToDTO(app, dto.resourceMailAddress());
         } catch (Exception e) {
             throw new CommonRbException(e);
         }
@@ -197,8 +204,8 @@ public class EwsProvider  implements Closeable {
         }
     }
 
-    private AppointmentDTO mapAppointmentToDTO(Appointment appointment) throws RuntimeException {
-
+    @Nonnull
+    private AppointmentDTO mapAppointmentToDTO(@Nonnull Appointment appointment, @Nonnull String resourceMailAddress) throws RuntimeException {
         try {
             appointment.load(PropertySet.FirstClassProperties);
 
@@ -208,30 +215,10 @@ public class EwsProvider  implements Closeable {
                     ZonedDateTime.ofInstant(appointment.getEnd().toInstant(), ZoneId.systemDefault()),
                     appointment.getSubject(),
                     MessageBody.getStringFromMessageBody(appointment.getBody()),
-                    appointment.getResources().getItems().stream().map(EmailAddress::getAddress).findFirst().orElseThrow()
+                    resourceMailAddress
             );
-
-            /*
-            dto.setBody(MessageBody.getStringFromMessageBody(appointment.getBody()));
-
-            Set<AttendeeDTO> set = appointment.getRequiredAttendees().getItems()
-                    .stream()
-                    .map(attendee->new AttendeeDTO(attendee.getAddress(), attendee.getName()))
-                    .collect(Collectors.toSet());
-
-            dto.getAttendees().addAll(set);
-
-            appointment
-                    .getExtendedProperties()
-                    .getItems()
-                    .stream()
-                    .filter(p->ORIGINAL_UID_PROPERTY_UID.equals(p.getPropertyDefinition().getPropertySetId()))
-                    .map(p->(String)p.getValue())
-                    .filter(StringUtils::isNoneBlank)
-                    .forEach(uid->dto.setSourceUid(uid));
-            */
         } catch(Exception ex) {
-            throw new RuntimeException(ex);
+            throw new CommonRbException(ex);
         }
     }
 
