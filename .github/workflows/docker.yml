@@ -1,14 +1,35 @@
-name: Release and tag backend
+name: Docker
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
 
 on:
-  workflow_dispatch:
+#  schedule:
+#    - cron: '37 0 * * *'
+  push:
+    #branches: [ "main" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+#  pull_request:
+#    branches: [ "main" ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  release:
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Get branch names.
+        id: branch-names
+        uses: tj-actions/branch-names@6871f53176ad61624f978536bbf089c574dc19a2 # v8
+
       - name: Checkout project
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
@@ -35,48 +56,24 @@ jobs:
               "id": "nvd",
               "username": "john.doe",
               "password": "${{ secrets.NVD_KEY }}"
-            }]          
+            },
+            {
+              "id": "docker.io",
+              "username": "${{ secrets.DOCKER_USERNAME }}",
+              "password": "${{ secrets.DOCKER_TOKEN }}"
+            }]
+
+      - name: Build with Maven
+        run: mvn -B package -Pdocker --file pom.xml
 
       - name: Extract version from POM
         id: extract_version
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          # Remove -SNAPSHOT from version
-          VERSION=${VERSION%-SNAPSHOT}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Set up Git user
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-
-      - name: Set release version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mvn versions:set -DnewVersion=${{ env.VERSION }}
-          git commit -am "Release version set"
-          git push origin main 
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
-      - name: Create and push tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git tag v${{ env.VERSION }}
-          git push origin v${{ env.VERSION }}
-
-      - name: Increase version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mvn -B release:update-versions
-          git commit -am "Next development version set"
-          git push origin main
-
-      - name: Upload released assets
+      - name: Upload Windows service SNAPSHOT
+        if: steps.branch-names.outputs.current_branch == 'main'
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2
         with:
           name: v${{ env.VERSION }}
@@ -85,4 +82,6 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            target/repository-*.*           
+            target/repository-*.zip |
+            target/repository-*.json |
+            target/repository-*.xml
