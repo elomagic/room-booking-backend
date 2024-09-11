@@ -1,4 +1,4 @@
-name: Release and tag backend
+name: Release and tag
 
 on:
   workflow_dispatch:
