@@ -12,7 +12,7 @@
 	<groupId>de.elomagic</groupId>
 	<artifactId>room-booking-backend</artifactId>
 
-	<version>0.0.6</version>
+	<version>0.0.6-SNAPSHOT</version>
 
 	<name>room-booking-backend</name>
 
@@ -275,17 +275,15 @@
 												<runCmds>
 													<run>mkdir -p /logs</run>
 													<run>mkdir -p /config</run>
-													<run>mkdir -p /repositories</run>
 												</runCmds>
 												<volumes>
 													<volume>/logs</volume>
 													<volume>/config</volume>
-													<volume>/repositories</volume>
 												</volumes>
 												<ports>
 													<port>8080/tcp</port>
 												</ports>
-												<entryPoint>["java", "-Dspring.profiles.active=demo", "-jar", "/${project.artifactId}-${project.version}.jar"]</entryPoint>
+												<entryPoint>["java", "-jar", "/${project.artifactId}-${project.version}.jar"]</entryPoint>
 											</build>
 										</image>
 									</images>
