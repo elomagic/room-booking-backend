@@ -26,7 +26,7 @@ public class AppointmentController {
 
     @GetMapping("/api/appointment")
     Set<AppointmentDTO> getAppointment(@RequestHeader("RB-Resource-ID") @Nullable String resourceAddress) {
-        return appointmentComponent.getAppointmentsOfToday(resourceAddress);
+        return appointmentComponent.getAppointmentsOfToday(resourceAddress == null ? "unknown@localhost" : resourceAddress);
     }
 
     @PostMapping("/api/appointment")
