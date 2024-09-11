@@ -64,6 +64,8 @@
 		<license.version>${project.version}</license.version>
 		<license.years>${project.inceptionYear}-present</license.years>
 		<license.mailto>mailto:developer AT elomagic DOT de</license.mailto>
+
+		<frontend.version>v0.0.1-SNAPSHOT</frontend.version>
 	</properties>
 
 	<dependencies>
@@ -172,6 +174,27 @@
 						<delimiter>@</delimiter>
 					</delimiters>
 					<useDefaultDelimiters>false</useDefaultDelimiters>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<version>1.9.0</version>
+				<executions>
+					<execution>
+						<id>download-frontend</id>
+						<phase>package</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<url>https://github.com/elomagic/room-booking-ui/releases/download/${frontend.version}/room-booking-ui.zip</url>
+					<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+					<md5>2a3f37543045164a20e4ef3b16aaec63</md5>
+					<unpack>true</unpack>
 				</configuration>
 			</plugin>
 
