@@ -94,6 +94,6 @@ jobs:
           tag_name: v${{ env.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
-          prerelease: false
+          prerelease: true
           files: |
             target/repository-*.*           
