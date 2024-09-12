@@ -185,7 +185,7 @@
 				<executions>
 					<execution>
 						<id>download-frontend</id>
-						<phase>package</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>wget</goal>
 						</goals>
