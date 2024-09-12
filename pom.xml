@@ -193,7 +193,7 @@
 				<configuration>
 					<url>https://github.com/elomagic/room-booking-ui/releases/download/${frontend.version}/room-booking-ui.zip</url>
 					<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
-					<md5>2a3f37543045164a20e4ef3b16aaec63</md5>
+					<md5>a08d0287942a478e71a178b465e43fa1</md5>
 					<unpack>true</unpack>
 				</configuration>
 			</plugin>
