@@ -14,7 +14,6 @@ import microsoft.exchange.webservices.data.core.enumeration.service.DeleteMode;
 import microsoft.exchange.webservices.data.core.enumeration.service.SendCancellationsMode;
 import microsoft.exchange.webservices.data.core.service.folder.CalendarFolder;
 import microsoft.exchange.webservices.data.core.service.item.Appointment;
-import microsoft.exchange.webservices.data.core.service.schema.AppointmentSchema;
 import microsoft.exchange.webservices.data.core.service.schema.ItemSchema;
 import microsoft.exchange.webservices.data.credential.ExchangeCredentials;
 import microsoft.exchange.webservices.data.credential.WebCredentials;
@@ -130,7 +129,7 @@ public class EwsProvider  implements Closeable {
         }
     }
 
-    private Appointment reloadAppointment(@Nonnull Appointment app) throws RuntimeException {
+    private Appointment reloadAppointment(@Nonnull Appointment app) throws CommonRbException {
         try {
             String uid = app.getId().getUniqueId();
             return findAppointmentByUid(uid);
@@ -205,7 +204,7 @@ public class EwsProvider  implements Closeable {
     }
 
     @Nonnull
-    private AppointmentDTO mapAppointmentToDTO(@Nonnull Appointment appointment, @Nonnull String resourceMailAddress) throws RuntimeException {
+    private AppointmentDTO mapAppointmentToDTO(@Nonnull Appointment appointment, @Nonnull String resourceMailAddress) throws CommonRbException {
         try {
             appointment.load(PropertySet.FirstClassProperties);
 

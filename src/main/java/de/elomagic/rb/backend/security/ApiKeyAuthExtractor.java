@@ -2,6 +2,7 @@ package de.elomagic.rb.backend.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.apache.http.client.methods.HttpOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -17,8 +18,10 @@ public class ApiKeyAuthExtractor {
 
     public Optional<Authentication> extract(HttpServletRequest request) {
         String providedKey = request.getHeader("RB-ApiKey");
-        if (providedKey == null || !providedKey.equals(apiKey))
+        String method = request.getMethod();
+        if (!HttpOptions.METHOD_NAME.equals(method) && (providedKey == null || !providedKey.equals(apiKey))) {
             return Optional.empty();
+        }
 
         return Optional.of(new ApiKeyAuth(providedKey, AuthorityUtils.NO_AUTHORITIES));
     }
