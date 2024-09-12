@@ -65,8 +65,8 @@
 		<license.years>${project.inceptionYear}-present</license.years>
 		<license.mailto>mailto:developer AT elomagic DOT de</license.mailto>
 
-		<frontend.version>v0.0.2</frontend.version>
-		<frontend.md5>a08d0287942a478e71a178b465e43fa1</frontend.md5>
+		<frontend.version>v0.0.3-rc.0</frontend.version>
+		<frontend.md5>98d4c6f1112f5bcc42cb6a539eb57424</frontend.md5>
 	</properties>
 
 	<dependencies>
