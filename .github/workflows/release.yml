@@ -1,4 +1,4 @@
-name: Release and deploy Docker image
+name: Release and deploy
 
 on:
   workflow_dispatch:
