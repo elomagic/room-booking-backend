@@ -1,4 +1,5 @@
 {
-    "version": "@project.version@",
-    "timestamp": "@maven.build.timestamp@"
+    "backendVersion": "@project.version@",
+    "timestamp": "@maven.build.timestamp@",
+    "frontendVersion": "@frontend.version@"
 }

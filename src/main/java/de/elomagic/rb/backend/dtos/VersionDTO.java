@@ -4,22 +4,28 @@ import jakarta.annotation.Nonnull;
 
 public class VersionDTO {
 
-    private String version;
+    private String backendVersion;
     private String timestamp;
+    private String frontendVersion;
 
     public VersionDTO() {}
 
-    public VersionDTO(@Nonnull String version, @Nonnull String timestamp) {
-        this.version = version;
+    public VersionDTO(@Nonnull String backendversion, @Nonnull String timestamp, @Nonnull String frontendVersion) {
+        this.backendVersion = backendversion;
         this.timestamp = timestamp;
+        this.frontendVersion = frontendVersion;
     }
 
-    public String getVersion() {
-        return version;
+    public String getBackendVersion() {
+        return backendVersion;
     }
 
     public String getTimestamp() {
         return timestamp;
+    }
+
+    public String getFrontendVersion() {
+        return frontendVersion;
     }
 
 }
