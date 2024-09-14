@@ -37,8 +37,10 @@ public class AppointmentComponent {
             return Set.of();
         }
 
-        ZonedDateTime now = ZonedDateTime.now();
-        return provider.queryAppointments(resourceAddress, now.minusDays(1), now.plusDays(1));
+        ZonedDateTime start = ZonedDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        ZonedDateTime end = ZonedDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(0);
+
+        return provider.queryAppointments(resourceAddress, start, end);
     }
 
     @Nonnull
