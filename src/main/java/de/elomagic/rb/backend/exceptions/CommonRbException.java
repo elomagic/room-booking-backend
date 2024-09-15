@@ -1,4 +1,4 @@
-package de.elomagic.rb.backend;
+package de.elomagic.rb.backend.exceptions;
 
 public class CommonRbException extends RuntimeException {
 

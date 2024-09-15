@@ -3,7 +3,7 @@ package de.elomagic.rb.backend.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.Nonnull;
 
-import de.elomagic.rb.backend.CommonRbException;
+import de.elomagic.rb.backend.exceptions.CommonRbException;
 
 import java.io.IOException;
 import java.nio.file.Path;

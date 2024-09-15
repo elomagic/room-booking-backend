@@ -26,7 +26,7 @@ import microsoft.exchange.webservices.data.property.definition.ExtendedPropertyD
 import microsoft.exchange.webservices.data.search.CalendarView;
 import microsoft.exchange.webservices.data.search.FindItemsResults;
 
-import de.elomagic.rb.backend.CommonRbException;
+import de.elomagic.rb.backend.exceptions.CommonRbException;
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
 
 import org.slf4j.Logger;

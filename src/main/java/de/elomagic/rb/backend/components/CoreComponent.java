@@ -1,14 +1,17 @@
 package de.elomagic.rb.backend.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nullable;
 
-import de.elomagic.rb.backend.CommonRbException;
+import de.elomagic.rb.backend.exceptions.CommonRbException;
 import de.elomagic.rb.backend.dtos.VersionDTO;
+import de.elomagic.rb.backend.exceptions.NotAuthorizedException;
 import de.elomagic.rb.backend.utils.Json5MapperFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,6 +22,9 @@ public class CoreComponent {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CoreComponent.class);
 
+    @Value("${rb.pin}")
+    private String authorizationPin;
+
     public VersionDTO getVersion() {
         try {
             ObjectMapper mapper = Json5MapperFactory.create();
@@ -26,6 +32,12 @@ public class CoreComponent {
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage(), ex);
             throw new CommonRbException(ex.getMessage(), ex);
+        }
+    }
+
+    public void validatePin(@Nullable String pin) {
+        if (!authorizationPin.equals(pin)) {
+            throw new NotAuthorizedException();
         }
     }
 

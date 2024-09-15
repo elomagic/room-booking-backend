@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
+import de.elomagic.rb.backend.exceptions.IllegalResourceException;
 import de.elomagic.rb.backend.providers.EwsProvider;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +48,7 @@ public class AppointmentComponent {
     public AppointmentDTO createAdHocAppointment(@Nonnull AppointmentDTO appointment) {
         if (StringUtils.isNoneBlank(resourcesFilter) && !resourcesFilter.contains(appointment.resourceMailAddress())) {
             LOGGER.warn("Resource '{}' does not match configured resource filter. Creation denied", appointment.resourceMailAddress());
-            throw new IllegalArgumentException("Resource '" + appointment.resourceMailAddress() + "' does not match configured resource filter");
+            throw new IllegalResourceException("Resource '" + appointment.resourceMailAddress() + "' does not match configured resource filter");
         }
 
         // TODO Validate time range appointment ???
@@ -58,7 +59,7 @@ public class AppointmentComponent {
     public AppointmentDTO updateCurrentAppointment(@Nonnull AppointmentDTO appointment) {
         if (StringUtils.isNoneBlank(resourcesFilter) && !resourcesFilter.contains(appointment.resourceMailAddress())) {
             LOGGER.warn("Resource '{}' does not match configured resource filter. Update denied", appointment.resourceMailAddress());
-            throw new IllegalArgumentException("Resource '" + appointment.resourceMailAddress() + "' does not match configured resource filter");
+            throw new IllegalResourceException("Resource '" + appointment.resourceMailAddress() + "' does not match configured resource filter");
         }
 
         // TODO Validate appointment
