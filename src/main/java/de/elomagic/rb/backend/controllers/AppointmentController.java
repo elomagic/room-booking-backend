@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,12 +31,12 @@ public class AppointmentController {
     }
 
     @PostMapping("/api/appointment")
-    AppointmentDTO createAppointment(@Nonnull AppointmentDTO appointment) {
+    AppointmentDTO createAppointment(@Nonnull @RequestBody AppointmentDTO appointment) {
         return appointmentComponent.createAdHocAppointment(appointment);
     }
 
     @PutMapping("/api/appointment")
-    AppointmentDTO updateAppointment(@Nonnull AppointmentDTO appointment) {
+    AppointmentDTO updateAppointment(@Nonnull @RequestBody AppointmentDTO appointment) {
         return appointmentComponent.updateCurrentAppointment(appointment);
     }
 

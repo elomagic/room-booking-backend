@@ -1,6 +1,7 @@
 package de.elomagic.rb.backend.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import de.elomagic.rb.backend.exceptions.CommonRbException;
@@ -25,6 +26,7 @@ public class CoreComponent {
     @Value("${rb.pin}")
     private String authorizationPin;
 
+    @Nonnull
     public VersionDTO getVersion() {
         try {
             ObjectMapper mapper = Json5MapperFactory.create();

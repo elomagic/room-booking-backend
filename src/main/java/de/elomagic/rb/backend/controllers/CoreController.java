@@ -9,6 +9,7 @@ import de.elomagic.rb.backend.dtos.VersionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,8 +27,8 @@ public class CoreController {
     }
 
     @PostMapping("/api/validate")
-    void validate(@Nonnull PinDTO dto) {
-        coreComponent.validatePin(dto.getPin());
+    void validate(@Nonnull @RequestBody PinDTO dto) {
+        coreComponent.validatePin(dto.pin());
     }
 
 }
