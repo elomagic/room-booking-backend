@@ -11,22 +11,37 @@ A tool that ...
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/elomagic/room-booking-backend/graphs/commit-activity)
 [![Buymeacoffee](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&label)](https://www.buymeacoffee.com/elomagic)
 
-## Using the library
+## Requirements
 
-### Requirements
+The latest version of Docker or something similar to run a Docker image.
 
-* Installed Java 21 or higher
-* Download the latest version of DT Tool https://github.com/elomagic/repository/releases
+## Installation And Setup 
 
-### Windows installation
+### Configuration
 
-Run the following command with ADMINISTRATOR RIGHTS to install YAR as a Windows service
-
-```powershell
-.\install.ps1
+```properties
+xxx=tbd
 ```
 
-Configuration will not be overwritten, if exists
+### Run demo mode
+
+```shell
+docker run --name room-display -d elo2017/remote-booking
+```
+
+
+## Configuration
+
+### Backend
+
+tbd.
+
+### Frontend
+
+The enter the configuration page, enter the pin. The Pin in the demonstration mode is still ```123456```` and can differ
+from the productive mode 
+
+## Using the library
 
 ## Contributing
 

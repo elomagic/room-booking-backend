@@ -1,5 +1,7 @@
 package de.elomagic.rb.backend.controllers;
 
+import jakarta.annotation.Nonnull;
+
 import de.elomagic.rb.backend.components.CoreComponent;
 import de.elomagic.rb.backend.dtos.PinDTO;
 import de.elomagic.rb.backend.dtos.VersionDTO;
@@ -24,7 +26,7 @@ public class CoreController {
     }
 
     @PostMapping("/api/validate")
-    void validate(PinDTO dto) {
+    void validate(@Nonnull PinDTO dto) {
         coreComponent.validatePin(dto.getPin());
     }
 
