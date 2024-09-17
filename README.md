@@ -18,13 +18,7 @@ This is a prototype for displaying appointments from an Exchange instance.
 * The latest version of Docker or something similar to run a Docker image.
 * Runtime Microsoft Exchange instance with enabled EWS endpoints
 
-## Installation And Setup 
-
-### Configuration
-
-```properties
-xxx=tbd
-```
+## Installation And Setup
 
 ### Run demo mode
 
@@ -32,16 +26,31 @@ xxx=tbd
 docker run --name room-display -d elo2017/remote-booking
 ```
 
-
 ## Configuration
 
 ### Backend
 
-tbd.
+Connectivity to the Exchange server will be done in the backend and the rest in the frontend.
+
+tbc.
+
+```properties
+# Change this to your api key. The key will be required by the frontend to access the backend
+rb.apiKey=<CreateYourOwnApiKey>
+# Change this to your pin. This will be required by the frontend to enter settings page
+rb.pin=123456
+
+rb.ext.ews.uri=https://<Exchange Server>/EWS/Exchange.asmx
+rb.ext.ews.autoDiscover=false
+# No filter means all resources accepted
+rb.ext.ews.resourcesFilter=
+rb.ext.ews.credentials.username=<YourUsername>
+rb.ext.ews.credentials.password=<YourSecret>
+```
 
 ### Frontend
 
-The enter the configuration page, enter the pin. The Pin in the demonstration mode is still ```123456```` and can differ
+The enter the configuration page, enter the pin. The Pin in the demonstration mode is still ```123456``` and can differ
 from the productive mode 
 
 ## Using the library
