@@ -1,6 +1,6 @@
 # Room Booking Backend
 
-A tool that ...
+This is a prototype for displaying appointments from an Exchange instance.
 
 ---
 
@@ -11,9 +11,12 @@ A tool that ...
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/elomagic/room-booking-backend/graphs/commit-activity)
 [![Buymeacoffee](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&label)](https://www.buymeacoffee.com/elomagic)
 
+![UI-example1.png](docs%2FUI-example1.png)
+
 ## Requirements
 
-The latest version of Docker or something similar to run a Docker image.
+* The latest version of Docker or something similar to run a Docker image.
+* Runtime Microsoft Exchange instance with enabled EWS endpoints
 
 ## Installation And Setup 
 
