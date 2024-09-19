@@ -20,11 +20,11 @@ public class SecurityConfig {
 
     private final ApiKeyAuthFilter authFilter;
 
-    @Value("${application.cors.allowed-origins}")
+    @Value("${application.cors.allowed-origins:.*}")
     private String allowedOrigins;
-    @Value("${application.cors.allowed-methods}")
+    @Value("${application.cors.allowed-methods:.*}")
     private String allowedMethods;
-    @Value("${application.cors.allowed-headers}")
+    @Value("${application.cors.allowed-headers:.*}")
     private String allowedHeaders;
 
     public SecurityConfig(@Autowired ApiKeyAuthFilter authFilter) {
