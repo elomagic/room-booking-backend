@@ -26,7 +26,7 @@ This is a prototype for displaying appointments from an Exchange instance.
 docker run --name room-display -p 48080:8080 -d elo2017/remote-booking
 ```
 
-Frondent now accessible on http://localhost:48080
+Frontend now accessible on http://localhost:48080
 
 ## Configuration
 
