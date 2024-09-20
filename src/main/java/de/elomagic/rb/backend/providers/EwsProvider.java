@@ -31,11 +31,11 @@ import de.elomagic.rb.backend.dtos.AppointmentDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.net.URI;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -45,7 +45,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class EwsProvider  implements Closeable {
+@Qualifier("ewsProvider")
+@Profile("!test")
+public class EwsProvider implements IProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EwsProvider.class);
 
@@ -55,7 +57,7 @@ public class EwsProvider  implements Closeable {
 
     @Value("${rb.ext.ews.uri}")
     private String uri;
-    @Value("${rb.ext.ews.autoDiscover}")
+    @Value("${rb.ext.ews.autoDiscover:false}")
     private String autoDiscover;
     @Value("${rb.ext.ews.credentials.username}")
     private String username;
@@ -67,6 +69,8 @@ public class EwsProvider  implements Closeable {
         initServiceClient();
     }
 
+    @Nonnull
+    @Override
     public Set<AppointmentDTO> queryAppointments(@Nonnull String resourceAddress, @Nonnull ZonedDateTime start, @Nonnull ZonedDateTime end) {
         try {
             Date dStart = Date.from(start.toInstant());
@@ -91,7 +95,7 @@ public class EwsProvider  implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         if(exchangeService == null) {
             return;
         }

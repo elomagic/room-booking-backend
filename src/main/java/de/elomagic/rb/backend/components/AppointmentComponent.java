@@ -5,9 +5,8 @@ import jakarta.annotation.Nullable;
 
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
 import de.elomagic.rb.backend.exceptions.IllegalResourceException;
-import de.elomagic.rb.backend.providers.EwsProvider;
+import de.elomagic.rb.backend.providers.IProvider;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +21,19 @@ public class AppointmentComponent {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentComponent.class);
 
-    private final EwsProvider provider;
+    private final IProvider provider;
 
-    @Value("${rb.ext.ews.resourcesFilter}")
-    private String resourcesFilter;
+    // Default all resources
+    @Value("${rb.ext.ews.resourcesFilter:.*}")
+    private String resourcesFilterRegEx;
 
-    public AppointmentComponent(@Autowired EwsProvider provider) {
+    public AppointmentComponent(@Autowired IProvider provider) {
         this.provider = provider;
     }
 
     @Nonnull
     public Set<AppointmentDTO> getAppointmentsOfToday(@Nonnull String resourceAddress) {
-        if (StringUtils.isNoneBlank(resourcesFilter) && !resourcesFilter.contains(resourceAddress)) {
+        if (!resourceAddress.matches(resourcesFilterRegEx)) {
             LOGGER.warn("Resource '{}' does not match configured resource filter. Query denied", resourceAddress);
             return Set.of();
         }
@@ -46,7 +46,7 @@ public class AppointmentComponent {
 
     @Nonnull
     public AppointmentDTO createAdHocAppointment(@Nonnull AppointmentDTO appointment) {
-        if (StringUtils.isNoneBlank(resourcesFilter) && !resourcesFilter.contains(appointment.resourceMailAddress())) {
+        if (!appointment.resourceMailAddress().matches(resourcesFilterRegEx)) {
             LOGGER.warn("Resource '{}' does not match configured resource filter. Creation denied", appointment.resourceMailAddress());
             throw new IllegalResourceException("Resource '" + appointment.resourceMailAddress() + "' does not match configured resource filter");
         }
@@ -57,7 +57,7 @@ public class AppointmentComponent {
 
     @Nullable
     public AppointmentDTO updateCurrentAppointment(@Nonnull AppointmentDTO appointment) {
-        if (StringUtils.isNoneBlank(resourcesFilter) && !resourcesFilter.contains(appointment.resourceMailAddress())) {
+        if (!appointment.resourceMailAddress().matches(resourcesFilterRegEx)) {
             LOGGER.warn("Resource '{}' does not match configured resource filter. Update denied", appointment.resourceMailAddress());
             throw new IllegalResourceException("Resource '" + appointment.resourceMailAddress() + "' does not match configured resource filter");
         }
