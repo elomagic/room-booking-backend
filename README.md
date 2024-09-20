@@ -42,6 +42,13 @@ rb.apiKey=<CreateYourOwnApiKey>
 # Change this to your pin. This will be required by the frontend to enter settings page
 rb.pin=123456
 
+# Supported api types are "ews" and "graph".
+rb.ext.apiType=ews
+
+# MS Graph setup
+rb.ext.graph.uri=https://graph.microsoft.com
+
+# MS EWS setup
 rb.ext.ews.uri=https://<Exchange Server>/EWS/Exchange.asmx
 rb.ext.ews.autoDiscover=false
 # No filter means all resources accepted

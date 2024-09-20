@@ -31,8 +31,8 @@ import de.elomagic.rb.backend.dtos.AppointmentDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -45,8 +45,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@Qualifier("ewsProvider")
 @Profile("!test")
+@ConditionalOnExpression("'${rb.ext.apiType}' == 'ews'")
 public class EwsProvider implements IProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EwsProvider.class);
@@ -103,6 +103,7 @@ public class EwsProvider implements IProvider {
         exchangeService.close();
     }
 
+    @Nonnull
     private ExtendedPropertyDefinition getProperty() throws Exception {
         return new ExtendedPropertyDefinition(ORIGINAL_UID_PROPERTY_UID, "OriginalAppointmentUID", MapiPropertyType.String);
     }
@@ -133,6 +134,7 @@ public class EwsProvider implements IProvider {
         }
     }
 
+    @Nonnull
     private Appointment reloadAppointment(@Nonnull Appointment app) throws CommonRbException {
         try {
             String uid = app.getId().getUniqueId();
