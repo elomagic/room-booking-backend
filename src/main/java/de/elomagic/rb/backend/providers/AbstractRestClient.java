@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
 
 import de.elomagic.rb.backend.exceptions.CommonRbException;
-import de.elomagic.rb.backend.providers.ews.EwsProvider;
 import de.elomagic.rb.backend.utils.Json5MapperFactory;
 
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ import java.util.List;
 public class AbstractRestClient {
 
     private static final String APPLICATION_JSON = "application/json";
-    private static final Logger LOGGER = LoggerFactory.getLogger(EwsProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRestClient.class);
     private final ObjectMapper objectMapper = Json5MapperFactory.create();
 
     @Value("${rb.ext.graph.token}")
@@ -32,7 +31,7 @@ public class AbstractRestClient {
     private HttpRequest.Builder createDefaultRequest(@Nonnull URI uri) {
         return HttpRequest
                 .newBuilder(uri)
-                .setHeader("Authentication", "Bearer " + token)
+                .setHeader("Authorization", "Bearer " + token)
                 .timeout(Duration.ofSeconds(60));
     }
 
