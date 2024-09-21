@@ -1,7 +1,5 @@
 package de.elomagic.rb.backend.components;
 
-import de.elomagic.rb.backend.providers.ProviderMock;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
