@@ -33,8 +33,6 @@ import de.elomagic.rb.backend.providers.IProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -46,8 +44,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@Profile("!test")
-@ConditionalOnExpression("'${rb.ext.apiType}' == 'ews'")
 public class EwsProvider implements IProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EwsProvider.class);

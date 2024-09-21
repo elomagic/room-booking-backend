@@ -12,8 +12,6 @@ import de.elomagic.rb.backend.providers.graph.model.Event;
 import de.elomagic.rb.backend.providers.graph.model.Events;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -28,56 +26,14 @@ import java.util.stream.Stream;
  * MS Graph provider
  */
 @Component
-@Profile("!test")
-@ConditionalOnExpression("'${rb.ext.apiType}' == 'graph'")
 public class GraphProvider extends AbstractRestClient implements IProvider {
-
-    // private GraphServiceClient graphClient;
 
     @Value("${rb.ext.graph.uri}")
     private String baseURL;
 
-    /*
-    // TODO
-    private String clientId = "YOUR_CLIENT_ID";
-    // TODO
-    private String tenantId = "YOUR_TENANT_ID"; // or "common" for multi-tenant apps
-
-    @PostConstruct
-    public void init() throws CommonRbException {
-
-        DeviceCodeCredential credential = new DeviceCodeCredentialBuilder()
-                .clientId(clientId)
-                .tenantId(tenantId)
-                .challengeConsumer(challenge -> System.out.println(challenge.getMessage()))
-                .build();
-
-        graphClient = new GraphServiceClient(credential, "User.Read");
-
-    }
-    */
-
     @Nonnull
     @Override
     public Set<AppointmentDTO> queryAppointments(@Nonnull String resourceAddress, @Nonnull ZonedDateTime start, @Nonnull ZonedDateTime end) {
-        /*
-        EventCollectionResponse events = graphClient
-                .users()
-                .byUserId(resourceAddress)
-                .calendarView()
-                .get(requestConfiguration -> {
-                    if (requestConfiguration.queryParameters != null) {
-                        requestConfiguration.queryParameters.startDateTime = start.toString();
-                        requestConfiguration.queryParameters.endDateTime = end.toString();
-                    }
-                });
-
-        return events == null || events.getValue() == null ? Set.of() : events.getValue()
-                .stream()
-                .map(e -> mapAppointmentToDTO(e, resourceAddress))
-                .collect(Collectors.toSet());
-         */
-
         try {
             URI uri = URI.create(
                     "%s/v1.0/users/%s/calendar/events?startDateTime=%s&endDateTime=%s".formatted(
@@ -93,7 +49,7 @@ public class GraphProvider extends AbstractRestClient implements IProvider {
             return Stream
                     .of(executeRequest(request, Events.class))
                     .flatMap(e -> e.getValue().stream())
-                    .map(a -> mapAppointmentToDTO(a, resourceAddress))
+                    .map(e -> mapAppointmentToDTO(e, resourceAddress))
                     .collect(Collectors.toSet());
         } catch (IOException | InterruptedException ex) {
             throw new CommonRbException(ex);

@@ -5,16 +5,12 @@ import jakarta.annotation.Nullable;
 
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
 
 @Component
-@Qualifier("mockProvider")
-@Profile("test")
 public class ProviderMock implements IProvider {
 
     private AppointmentDTO createAppointment() {
