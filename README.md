@@ -44,6 +44,8 @@ rb.pin=123456
 
 # Supported api types are "ews" and "graph".
 rb.ext.apiType=ews
+# Regular expression to filter resources
+rb.resourcesFilter=.*
 
 # MS Graph setup
 rb.ext.graph.uri=https://graph.microsoft.com
@@ -51,8 +53,6 @@ rb.ext.graph.uri=https://graph.microsoft.com
 # MS EWS setup
 rb.ext.ews.uri=https://<Exchange Server>/EWS/Exchange.asmx
 rb.ext.ews.autoDiscover=false
-# No filter means all resources accepted
-rb.ext.ews.resourcesFilter=
 rb.ext.ews.credentials.username=<YourUsername>
 rb.ext.ews.credentials.password=<YourSecret>
 ```

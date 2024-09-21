@@ -1,4 +1,4 @@
-package de.elomagic.rb.backend.providers;
+package de.elomagic.rb.backend.providers.ews;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -28,6 +28,7 @@ import microsoft.exchange.webservices.data.search.FindItemsResults;
 
 import de.elomagic.rb.backend.exceptions.CommonRbException;
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
+import de.elomagic.rb.backend.providers.IProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

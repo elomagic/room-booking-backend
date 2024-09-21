@@ -24,7 +24,7 @@ public class AppointmentComponent {
     private final IProvider provider;
 
     // Default all resources
-    @Value("${rb.ext.ews.resourcesFilter:.*}")
+    @Value("${rb.resourcesFilter:.*}")
     private String resourcesFilterRegEx;
 
     public AppointmentComponent(@Autowired IProvider provider) {
