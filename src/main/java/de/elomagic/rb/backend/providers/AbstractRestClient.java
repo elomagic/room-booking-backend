@@ -6,9 +6,9 @@ import jakarta.annotation.Nonnull;
 import de.elomagic.rb.backend.exceptions.CommonRbException;
 import de.elomagic.rb.backend.utils.Json5MapperFactory;
 
+import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.net.URI;
@@ -25,13 +25,10 @@ public class AbstractRestClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRestClient.class);
     private final ObjectMapper objectMapper = Json5MapperFactory.create();
 
-    @Value("${rb.ext.graph.token}")
-    private String token;
-
-    private HttpRequest.Builder createDefaultRequest(@Nonnull URI uri) {
+    @Nonnull
+    protected HttpRequest.Builder createDefaultRequest(@Nonnull URI uri) {
         return HttpRequest
                 .newBuilder(uri)
-                .setHeader("Authorization", "Bearer " + token)
                 .timeout(Duration.ofSeconds(60));
     }
 
@@ -63,7 +60,9 @@ public class AbstractRestClient {
 
     @Nonnull
     protected HttpRequest createDefaultPUT(@Nonnull URI uri, @Nonnull HttpRequest.BodyPublisher publisher, @Nonnull String... headers) {
-        HttpRequest.Builder builder = createDefaultRequest(uri).header("Content-Type", APPLICATION_JSON);
+        HttpRequest.Builder builder = createDefaultRequest(uri)
+                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
+                .header(HttpHeaders.ACCEPT,APPLICATION_JSON);
 
         if (headers.length != 0) {
             builder = builder.headers(headers);
@@ -77,8 +76,23 @@ public class AbstractRestClient {
     @Nonnull
     protected HttpRequest createDefaultPOST(@Nonnull URI uri, @Nonnull HttpRequest.BodyPublisher publisher, @Nonnull String... headers) {
         HttpRequest.Builder builder = createDefaultRequest(uri)
-                .header("Content-Type", APPLICATION_JSON)
-                .header("Accept",APPLICATION_JSON);
+                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
+                .header(HttpHeaders.ACCEPT,APPLICATION_JSON);
+
+        if (headers.length != 0) {
+            builder = builder.headers(headers);
+        }
+
+        return builder
+                .POST(publisher)
+                .build();
+    }
+
+    @Nonnull
+    protected HttpRequest createDefaultFormPOST(@Nonnull URI uri, @Nonnull HttpRequest.BodyPublisher publisher, @Nonnull String... headers) {
+        HttpRequest.Builder builder = createDefaultRequest(uri)
+                .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
+                .header(HttpHeaders.ACCEPT,APPLICATION_JSON);
 
         if (headers.length != 0) {
             builder = builder.headers(headers);

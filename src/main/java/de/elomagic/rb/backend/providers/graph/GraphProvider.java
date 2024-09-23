@@ -2,12 +2,13 @@ package de.elomagic.rb.backend.providers.graph;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.annotation.PostConstruct;
 
 import de.elomagic.rb.backend.dtos.AppointmentDTO;
 import de.elomagic.rb.backend.exceptions.CommonRbException;
 import de.elomagic.rb.backend.exceptions.NotSupportedException;
-import de.elomagic.rb.backend.providers.AbstractRestClient;
 import de.elomagic.rb.backend.providers.IProvider;
+import de.elomagic.rb.backend.providers.OAuth2RestClient;
 import de.elomagic.rb.backend.providers.graph.model.Event;
 import de.elomagic.rb.backend.providers.graph.model.Events;
 
@@ -26,10 +27,26 @@ import java.util.stream.Stream;
  * MS Graph provider
  */
 @Component
-public class GraphProvider extends AbstractRestClient implements IProvider {
+public class GraphProvider extends OAuth2RestClient implements IProvider {
 
     @Value("${rb.ext.graph.uri}")
     private String baseURL;
+    @Value("${rb.ext.graph.oauth2Uri}")
+    private String oauth2Uri;
+    @Value("${rb.ext.graph.clientId}")
+    private String clientId;
+    @Value("${rb.ext.graph.clientSecret}")
+    private String clientSecret;
+
+    /**
+     * https://learn.microsoft.com/en-us/graph/auth/auth-concepts
+     * https://learn.microsoft.com/de-de/graph/auth/auth-concepts
+     * https://learn.microsoft.com/de-de/graph/auth-v2-service?tabs=http
+     */
+    @PostConstruct
+    public void init() {
+        setOAuthConfiguration(oauth2Uri, clientSecret, clientSecret, baseURL);
+    }
 
     @Nonnull
     @Override

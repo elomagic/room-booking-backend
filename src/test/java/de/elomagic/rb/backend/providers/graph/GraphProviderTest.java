@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -31,12 +30,10 @@ class GraphProviderTest extends AbstractMockedServer {
     @Autowired
     private BeanFactory beanFactory;
 
-    @Value("${rb.ext.graph.token}")
-    private String token;
-
     @Test
     void testQueryAppointments() throws IOException {
         String ps = IOUtils.resourceToString("ms-graph-events1.json5", StandardCharsets.UTF_8, GraphProviderTest.class.getClassLoader());
+        String t = IOUtils.resourceToString("token.json5", StandardCharsets.UTF_8, GraphProviderTest.class.getClassLoader());
 
         try (MockServerClient client = new MockServerClient("localhost", getPort())) {
 
@@ -44,11 +41,24 @@ class GraphProviderTest extends AbstractMockedServer {
             ZonedDateTime end = ZonedDateTime.now().plusDays(1);
 
             client.when(
+                            request()
+                                    .withMethod("POST")
+                                    .withPath("/token")
+                            //.withQueryStringParameter("startDateTime", start.toString())
+                            //.withQueryStringParameter("endDateTime", end.toString())
+                    )
+                    .respond(
+                            response()
+                                    .withStatusCode(200)
+                                    .withBody(t)
+                    );
+
+            client.when(
                     request()
                             // /v1.0/users/%s/calendar/events?startDateTime=%s&endDateTime=%s
                             .withMethod("GET")
                             .withPath("/v1.0/users/room_maui@my-company.internal/calendar/events")
-                            .withHeader("Authorization", "Bearer " + token)
+                            .withHeader("Authorization", "Bearer FOmiJVpD1VKSIKfyILpf+2OzLdW7t2grZdJ8NuHLAVoRkck2SyzAyFZ0B7XwTl4h")
                             //.withQueryStringParameter("startDateTime", start.toString())
                             //.withQueryStringParameter("endDateTime", end.toString())
                     )
@@ -60,6 +70,7 @@ class GraphProviderTest extends AbstractMockedServer {
 
             // Execute the text
             GraphProvider provider = beanFactory.getBean(GraphProvider.class);
+
             Set<AppointmentDTO> appointments = provider.queryAppointments("room_maui@my-company.internal", start, end);
             assertEquals(1, appointments.size());
 

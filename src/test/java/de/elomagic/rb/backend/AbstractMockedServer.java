@@ -30,6 +30,13 @@ public abstract class AbstractMockedServer {
         field.setAccessible(true);
         field.set(provider, "http://localhost:%s".formatted(getPort()));
         // "rb.ext.graph.uri"
+
+        provider.setOAuthConfiguration(
+                "http://localhost:%s/token".formatted(getPort()),
+                "f256b324-1b01-4de7-9eaf-023bcdf34c38",
+                "a96fb733-ad9b-4cc2-af22-5c77b589b964",
+                "http://localhost:%s".formatted(getPort())
+        );
     }
 
     @AfterEach
