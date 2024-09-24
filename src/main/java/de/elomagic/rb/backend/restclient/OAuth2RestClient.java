@@ -43,7 +43,7 @@ public abstract class OAuth2RestClient extends AbstractRestClient {
             formData.put("grant_type", "client_credentials");
             formData.put("client_id", clientId);
             formData.put("client_secret", clientSecret);
-            formData.put("scope", scopeUrl);
+            formData.put("scope", scopeUrl + (scopeUrl.endsWith("/") ? "" : "/") + ".default");
 
             HttpRequest request = createDefaultPOST(uri, BodyPublisherWrap.of(formData));
 
