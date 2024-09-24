@@ -1,4 +1,4 @@
-package de.elomagic.rb.backend.providers.graph;
+package de.elomagic.rb.backend.restclient;
 
 import java.net.URLEncoder;
 import java.net.http.HttpRequest;
@@ -6,6 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Body publisher for urlencoded forms aka as content type "application/x-www-form-urlencoded".
+ */
 public final class BodyPublisher {
 
     private BodyPublisher() {}

@@ -1,4 +1,4 @@
-package de.elomagic.rb.backend.providers;
+package de.elomagic.rb.backend.restclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;

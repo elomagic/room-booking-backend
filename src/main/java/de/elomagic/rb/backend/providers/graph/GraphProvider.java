@@ -8,7 +8,7 @@ import de.elomagic.rb.backend.dtos.AppointmentDTO;
 import de.elomagic.rb.backend.exceptions.CommonRbException;
 import de.elomagic.rb.backend.exceptions.NotSupportedException;
 import de.elomagic.rb.backend.providers.IProvider;
-import de.elomagic.rb.backend.providers.OAuth2RestClient;
+import de.elomagic.rb.backend.restclient.OAuth2RestClient;
 import de.elomagic.rb.backend.providers.graph.model.Event;
 import de.elomagic.rb.backend.providers.graph.model.Events;
 

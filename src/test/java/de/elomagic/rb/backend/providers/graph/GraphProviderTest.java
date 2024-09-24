@@ -17,8 +17,11 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockserver.model.Header.header;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
+import static org.mockserver.model.Parameter.param;
+import static org.mockserver.model.ParameterBody.params;
 
 @SpringBootTest
 @TestPropertySource(properties = {
@@ -44,8 +47,16 @@ class GraphProviderTest extends AbstractMockedServer {
                             request()
                                     .withMethod("POST")
                                     .withPath("/token")
-                            //.withQueryStringParameter("startDateTime", start.toString())
-                            //.withQueryStringParameter("endDateTime", end.toString())
+                                    .withHeaders(
+                                            header("Content-Type", "application/x-www-form-urlencoded")
+                                    )
+                                    .withBody(
+                                            params(
+                                                    param("grant_type", "client_credentials"),
+                                                    param("client_id", "f256b324-1b01-4de7-9eaf-023bcdf34c38"),
+                                                    param("client_secret", "a96fb733-ad9b-4cc2-af22-5c77b589b964")
+                                            )
+                                    )
                     )
                     .respond(
                             response()

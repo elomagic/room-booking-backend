@@ -1,4 +1,4 @@
-package de.elomagic.rb.backend.providers.graph.model;
+package de.elomagic.rb.backend.restclient.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;

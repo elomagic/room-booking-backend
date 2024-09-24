@@ -1,10 +1,9 @@
-package de.elomagic.rb.backend.providers;
+package de.elomagic.rb.backend.restclient;
 
 import jakarta.annotation.Nonnull;
 
 import de.elomagic.rb.backend.exceptions.CommonRbException;
-import de.elomagic.rb.backend.providers.graph.BodyPublisher;
-import de.elomagic.rb.backend.providers.graph.model.TokenResponse;
+import de.elomagic.rb.backend.restclient.model.TokenResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
