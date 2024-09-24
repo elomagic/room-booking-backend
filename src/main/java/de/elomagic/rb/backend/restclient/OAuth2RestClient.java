@@ -45,7 +45,7 @@ public abstract class OAuth2RestClient extends AbstractRestClient {
             formData.put("client_secret", clientSecret);
             formData.put("scope", scopeUrl);
 
-            HttpRequest request = createDefaultFormPOST(uri, BodyPublisher.of(formData));
+            HttpRequest request = createDefaultPOST(uri, BodyPublisherWrap.of(formData));
 
             TokenResponse tokenResponse = executeRequest(request, TokenResponse.class);
             bearerToken = tokenResponse.getAccessToken();

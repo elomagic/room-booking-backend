@@ -59,47 +59,32 @@ public class AbstractRestClient {
     }
 
     @Nonnull
-    protected HttpRequest createDefaultPUT(@Nonnull URI uri, @Nonnull HttpRequest.BodyPublisher publisher, @Nonnull String... headers) {
+    protected HttpRequest createDefaultPUT(@Nonnull URI uri, @Nonnull BodyPublisherWrap publisher, @Nonnull String... headers) {
         HttpRequest.Builder builder = createDefaultRequest(uri)
-                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
-                .header(HttpHeaders.ACCEPT,APPLICATION_JSON);
+                .header(HttpHeaders.CONTENT_TYPE, publisher.getContentType())
+                .header(HttpHeaders.ACCEPT, APPLICATION_JSON);
 
         if (headers.length != 0) {
             builder = builder.headers(headers);
         }
 
         return builder
-                .PUT(publisher)
+                .PUT(publisher.getBodyPublisher())
                 .build();
     }
 
     @Nonnull
-    protected HttpRequest createDefaultPOST(@Nonnull URI uri, @Nonnull HttpRequest.BodyPublisher publisher, @Nonnull String... headers) {
+    protected HttpRequest createDefaultPOST(@Nonnull URI uri, @Nonnull BodyPublisherWrap publisher, @Nonnull String... headers) {
         HttpRequest.Builder builder = createDefaultRequest(uri)
-                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
-                .header(HttpHeaders.ACCEPT,APPLICATION_JSON);
+                .header(HttpHeaders.CONTENT_TYPE, publisher.getContentType())
+                .header(HttpHeaders.ACCEPT, APPLICATION_JSON);
 
         if (headers.length != 0) {
             builder = builder.headers(headers);
         }
 
         return builder
-                .POST(publisher)
-                .build();
-    }
-
-    @Nonnull
-    protected HttpRequest createDefaultFormPOST(@Nonnull URI uri, @Nonnull HttpRequest.BodyPublisher publisher, @Nonnull String... headers) {
-        HttpRequest.Builder builder = createDefaultRequest(uri)
-                .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .header(HttpHeaders.ACCEPT,APPLICATION_JSON);
-
-        if (headers.length != 0) {
-            builder = builder.headers(headers);
-        }
-
-        return builder
-                .POST(publisher)
+                .POST(publisher.getBodyPublisher())
                 .build();
     }
 
